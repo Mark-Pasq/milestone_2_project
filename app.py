@@ -36,7 +36,7 @@ def prompt_add_book_to_the_list():
 
 def list_all_books():
     for book in database.list_all_books():
-        read = 'YES' if book[3] else 'NO'  # Book [3] is a false value (0) if book is not read
+        read = 'YES' if book[0] else 'NO'  # Book [3] is a false value (0) if book is not read
         print(f'{book[1]} by {book[2]} - read: {read}')
 
 
