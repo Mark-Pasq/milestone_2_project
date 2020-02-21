@@ -33,14 +33,13 @@ def prompt_add_book_to_the_list():
     name = input(f'Enter the name of the new book:  ')
     author = input(f'Enter the name of the author of the new book:  ')
 
-    database.prompt_add_book_to_the_list(name, author)
+    database.insert_a_book(name, author)
 
 
 def list_all_books():
-    books = database.list_all_books()
-    for book in books:
-        read = 'YES' if book['read'] else 'NO'
-        print(f"{book['name']} by {book['author']} - read: {read}")
+    for book in database.list_all_books():
+        read = 'YES' if book[3] else 'NO'   # Book [3] is a false value (0) if book is not read
+        print(f'{book[1]} by {book[2]} - read: {read}')
 
 
 def prompt_mark_book_as_read():

@@ -4,62 +4,53 @@ Format of the csv file:
 
 name, author, read\n
 """
+from utils.DatabaseConnection import DatabaseConnection
 
-import sqlite3
 
-Book = Tuple(int, str, str, int)
+class Tuple(object):
+    pass
+
+
+Book = Tuple[int, str, str, int]
+from typing import List, Tuple
 
 
 def create_book_table() -> None:
-    conn = sqlite3.connect('data.db')
-    cu = conn.cursor()
-
-    cu.execute(f'''CREATE TABLE IF NOT EXISTS books(name TEXT PRIMARY KEY, author TEXT, read_status INTEGER); ''')
-
-    conn.commit()
-    conn.close()
+    with DatabaseConnection('data.db') as conn:
+        cu = conn.cursor()
+        # SQLite automatically makes 'integer primary key' row auto-incrementing.
+        cu.execute('CREATE TABLE IF NOT EXISTS books'
+                   '(id INTEGER PRIMARY KEY, name TEXT, author TEXT, read INTEGER default 0);')
 
 
-def prompt_add_book_to_the_list(name, author):
-    conn = sqlite3.connect('data.db')
-    cu = conn.cursor()
+def list_all_books() -> List[Book]:
+    with DatabaseConnection('data.db') as conn:
+        cu = conn.cursor()
 
-    cu.execute(f'''INSERT INTO books VALUES(?, ?, 0)''', (name, author))
-
-    conn.commit()
-    conn.close()
-
-
-def list_all_books():
-    conn = sqlite3.connect('data.db')
-    cu = conn.cursor()
-
-    cu.execute(f'''SELECT * FROM books ''')
-    books = [{'name': row[0], 'author': row[1], 'read_status': row[2]} for row in cu.fetchall()]
-
-    conn.close()
-
+        cu.execute(f'''SELECT * FROM books ''')
+        books = cu.fetchall()
     return books
 
 
-def prompt_mark_book_as_read(name):
-    conn = sqlite3.connect('data.db')
-    cu = conn.cursor()
+def insert_a_book(name: str, author: str) -> None:
+    with DatabaseConnection('data.db') as conn:
+        cu = conn.cursor()
 
-    cu.execute('''UPDATE books SET read=1 WHERE name=?, (name, )''')
-
-    cu.commit()
-    cu.close()
+        cu.execute('INSERT INTO books (name, author) VALUES (?, ?)', (name, author))
 
 
-def prompt_to_delete_a_book(name):
-    conn = sqlite3.connect('data.db')
-    cu = conn.cursor()
+def prompt_mark_book_as_read(name: str) -> None:
+    with DatabaseConnection('data.db') as conn:
+        cu = conn.cursor()
 
-    cu.execute('''DELETE FROM books WHERE name=? ['name']''')
+        cu.execute('UPDATE books SET read=1 WHERE name=?', (name,))
 
-    cu.commit()
-    cu.close()
+
+def prompt_to_delete_a_book(name: str) -> None:
+    with DatabaseConnection('data.db') as conn:
+        cu = conn.cursor()
+
+        cu.execute('DELETE FROM books WHERE name=?', (name,))
 
 
 """
