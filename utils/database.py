@@ -7,8 +7,10 @@ name, author, read\n
 
 import sqlite3
 
+Book = Tuple(int, str, str, int)
 
-def create_book_table():
+
+def create_book_table() -> None:
     conn = sqlite3.connect('data.db')
     cu = conn.cursor()
 
@@ -54,7 +56,23 @@ def prompt_to_delete_a_book(name):
     conn = sqlite3.connect('data.db')
     cu = conn.cursor()
 
-    cu.execute('''DELETE FROM books WHERE name=?, (name, )''')
+    cu.execute('''DELETE FROM books WHERE name=? ['name']''')
 
     cu.commit()
     cu.close()
+
+
+"""
+These two functions below are options for the delete function of this
+program.  They are not going to be used and are being saved for 
+reference only.
+"""
+# def prompt_to_delete_a_book(name):
+#     books = list_all_books()
+#     books = [book for book in books if book['name'] != name]
+#     _save_all_books(books)
+
+# def prompt_to_delete_a_book(name):
+#     for book in books:
+#         if book['name'] == name:
+#             books.remove(book)

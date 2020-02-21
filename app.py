@@ -40,7 +40,7 @@ def list_all_books():
     books = database.list_all_books()
     for book in books:
         read = 'YES' if book['read'] else 'NO'
-        print(f"{book['name']} by {book['author']}, read: {book['read']}")
+        print(f"{book['name']} by {book['author']} - read: {read}")
 
 
 def prompt_mark_book_as_read():
