@@ -23,8 +23,6 @@ def menu():
             prompt_mark_book_as_read()
         elif user_input == 'd':
             prompt_to_delete_a_book()
-        else:
-            print('Unknown command or input.  Try your selection again.')
 
         user_input = input(USER_CHOICE)
 
@@ -38,7 +36,7 @@ def prompt_add_book_to_the_list():
 
 def list_all_books():
     for book in database.list_all_books():
-        read = 'YES' if book[3] else 'NO'   # Book [3] is a false value (0) if book is not read
+        read = 'YES' if book[3] else 'NO'  # Book [3] is a false value (0) if book is not read
         print(f'{book[1]} by {book[2]} - read: {read}')
 
 

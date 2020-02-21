@@ -4,15 +4,11 @@ Format of the csv file:
 
 name, author, read\n
 """
+from typing import Tuple, List
+
 from utils.DatabaseConnection import DatabaseConnection
 
-
-class Tuple(object):
-    pass
-
-
 Book = Tuple[int, str, str, int]
-from typing import List, Tuple
 
 
 def create_book_table() -> None:
@@ -20,7 +16,7 @@ def create_book_table() -> None:
         cu = conn.cursor()
         # SQLite automatically makes 'integer primary key' row auto-incrementing.
         cu.execute('CREATE TABLE IF NOT EXISTS books'
-                   '(id INTEGER PRIMARY KEY, name TEXT, author TEXT, read INTEGER default 0);')
+                   '(id INTEGER PRIMARY KEY, name TEXT, author TEXT, read_status INTEGER default 0);')
 
 
 def list_all_books() -> List[Book]:
@@ -43,7 +39,7 @@ def prompt_mark_book_as_read(name: str) -> None:
     with DatabaseConnection('data.db') as conn:
         cu = conn.cursor()
 
-        cu.execute('UPDATE books SET read=1 WHERE name=?', (name,))
+        cu.execute('UPDATE books SET read_status=1 WHERE name=?', (name,))
 
 
 def prompt_to_delete_a_book(name: str) -> None:
